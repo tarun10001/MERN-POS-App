@@ -1,0 +1,53 @@
+.item {
+    box-shadow: 0 0 3px rgb(173, 166, 166);
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.item .name {
+    color: tomato;
+    font-size: 20px;
+}
+.item .price {
+    text-align: center;
+    color: black;
+    font-size: 20px;
+    margin-top: 10px;
+}
+.item .brand {
+    text-align: center;
+    color: black;
+    font-size: 20px;
+}
+.item .imgg {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.item button {
+    margin-top:12px;
+    background-color: #1A73E8 !important;
+    color: white !important;
+}
+
+.item button:hover {
+    background-color: #0a4898 !important;
+}
+
+input {
+    border : 1px solid #4a7fc4 !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+input:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.ant-select-selector {
+    border : 1px solid #4a7fc4 !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
