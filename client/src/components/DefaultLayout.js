@@ -106,11 +106,11 @@ const DefaultLayout = (props ) => {
         </Header>
 
         <Content
-          className="site-layout-background content_container"
+          className="site-layout-background"
           style={{
             margin: "10px",
             padding: 24,
-            minHeight: 280,
+            minHeight : '80vh'
           }}
         >
           {props.children}

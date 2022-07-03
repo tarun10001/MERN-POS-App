@@ -61,6 +61,7 @@
 
 .spinner {
   position: absolute;
+  z-index : 10;
   top: 50%;
   left: 50%;
   transform : translate(-50%, -50%);
@@ -68,4 +69,9 @@
 .spinner-border {
   height: 100px;
   width : 100px;
+}
+
+.ant-layout-content {
+  height : 80vh;
+  overflow-y: scroll;
 }

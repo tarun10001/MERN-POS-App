@@ -2,24 +2,48 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Table, Modal, Form, Input, Select } from "antd";
-
+import { Button, Table, Modal, Form, Input, Select, message } from "antd";
+import { useDispatch } from "react-redux";
 
 function Items() {
   const [itemsData, setItemsData] = useState([]);
   const [addEditModalVisibility, setAddEditModalVisibility] = useState(false);
+  const dispatch = useDispatch();
+  const [editingItem, setEditingItem] = useState(null);
 
   const getAllItems = () => {
+    dispatch({type : "showLoading"});
     axios
-      .get("http://localhost:5000/api/items/get-all-items")
+      .get("/api/items/get-all-items")
       .then((response) => {
+        dispatch({ type: "hideLoading" });
         setItemsData(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        dispatch({ type: "hideLoading" });
+        // console.log(error);
       });
   };
+
+
+  const deleteItem = (record) => {
+    dispatch({type : "showLoading"});
+    axios
+      .post("/api/items/delete-item", {itemId : record._id})
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        message.success("Item Deleted Successfully")
+        getAllItems()
+        // console.log(response.data);
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        message.error("Something went wrong")
+        // console.log(error);
+      });
+  };
+
 
   useEffect(() => {
     getAllItems();
@@ -50,17 +74,55 @@ function Items() {
       dataIndex: "_id",
       render: (id, record) => (
         <div className="d-flex">
-          <DeleteOutlined className="mx-2" />
-          <EditOutlined className="mx-2" />
+          <EditOutlined
+            className="mx-2"
+            onClick={() => {
+              setEditingItem(record);
+              setAddEditModalVisibility(true);
+            }}
+          />
+          <DeleteOutlined className="mx-2" onClick={() => deleteItem(record)} />
         </div>
       ),
-    },
+    }, 
   ];
 
   const onFinish = (values) => {
-    console.log(values)
-  }
-
+    dispatch({ type: "showLoading" });
+    if (editingItem === null) {
+      axios
+      .post("/api/items/add-item", values)
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        // console.log(response.data);
+        message.success("Item Added Successfully");
+        setAddEditModalVisibility(false);
+        getAllItems();
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        message.error("Something went wrong");
+        // console.log(error);
+      });
+    }
+    else {
+      axios
+      .post("/api/items/edit-item", {...values, itemId : editingItem._id})
+      .then((response) => {
+        dispatch({ type: "hideLoading" });
+        // console.log(response.data);
+        message.success("Item Edited Successfully");
+        setEditingItem(null)
+        setAddEditModalVisibility(false);
+        getAllItems();
+      })
+      .catch((error) => {
+        dispatch({ type: "hideLoading" });
+        message.error("Something went wrong");
+        // console.log(error);
+      });
+    }
+  };
 
   return (
     <DefaultLayout>
@@ -72,42 +134,50 @@ function Items() {
       </div>
       <Table columns={columns} dataSource={itemsData} bordered />
 
-      <Modal
-        onCancel={() => setAddEditModalVisibility(false)}
-        visible={addEditModalVisibility}
-        title="Add New item"
-        footer={false}
-      >
 
-        <Form layout="vertical" onFinish={onFinish}>
+      {addEditModalVisibility && (
+        <Modal
+          onCancel={() => {
+            setEditingItem(null)
+            setAddEditModalVisibility(false)
+          }}
+          visible={addEditModalVisibility}
+          title={`${editingItem !== null ? 'Edit Item' : 'Add New Item'}`}
+          footer={false}
+        >
+          <Form
+            initialValues={editingItem}
+            layout="vertical"
+            onFinish={onFinish}
+          >
+            <Form.Item name="name" label="Name" placeholder="Enter Name">
+              <Input />
+            </Form.Item>
 
-          <Form.Item name="name" label="Name" placeholder="Enter Name">
-            <Input />
-          </Form.Item>
+            <Form.Item name="price" label="Price" placeholder="Enter price">
+              <Input />
+            </Form.Item>
 
-          <Form.Item name="price" label="Price" placeholder="Enter price">
-            <Input />
-          </Form.Item>
+            <Form.Item name="image" label="Image URL" placeholder="URL address">
+              <Input />
+            </Form.Item>
 
-          <Form.Item name="image" label="Image URL" placeholder="URL address">
-            <Input />
-          </Form.Item>
+            <Form.Item name="category" label="Category">
+              <Select>
+                <Select.Option value="Electronics">Electronics</Select.Option>
+                <Select.Option value="Furniture">Furniture</Select.Option>
+                <Select.Option value="Mens-Shoes">Mens-Shoes</Select.Option>
+              </Select>
+            </Form.Item>
 
-          <Form.Item name="category" label="Category">
-            <Select>
-              <Select.Option value="Electronics">Electronics</Select.Option>
-              <Select.Option value="Furniture">Furniture</Select.Option>
-              <Select.Option value="Mens-Shoes">Mens-Shoes</Select.Option>
-            </Select>
-          </Form.Item>
-
-          <div className="d-flex justify-content-end">
-            <Button htmlType="submit" type="primary">
-              SAVE
-            </Button>
-          </div>
-        </Form>
-      </Modal>
+            <div className="d-flex justify-content-end">
+              <Button htmlType="submit" type="primary">
+                SAVE
+              </Button>
+            </div>
+          </Form>
+        </Modal>
+      )}
     </DefaultLayout>
   );
 }

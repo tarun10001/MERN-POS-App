@@ -8,7 +8,8 @@ let connectionObj = mongoose.connection
 
 connectionObj.on('connected', () => {
     console.log('MongoDB connection established')
-})
+});
+
 connectionObj.on('error', () => {
     console.log('connection error')
-})
+});

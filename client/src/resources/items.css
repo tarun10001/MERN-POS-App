@@ -51,3 +51,37 @@ input:focus {
     box-shadow: none !important;
     outline: none !important;
 }
+
+.spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform : translate(-50%, -50%);
+  }
+  .spinner-border {
+    height: 100px;
+    width : 100px;
+  }
+
+  .category {
+    border: 2px solid rgb(202, 199, 199);
+    margin-right: 50px;
+    align-items: center;
+    padding-left: 25px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .category h5 {
+    margin-right: 25px;
+  }
+
+  .category img {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    /* margin: -2px; */
+  }
+
+  .selected-category {
+    border : 3px solid rgb(67, 67, 100);
+  }
