@@ -1,0 +1,23 @@
+.authentication {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    background-size: 100% 100%;
+    background-image: url("./auth.svg");
+}
+.authentication .ant-row {
+    justify-content: center !important;
+    width: 100%;
+}
+.authentication form {
+    background-color: white;
+    padding : 20px;
+    color: white;
+}
+.authentication form h1{
+    text-align: center;
+}
+
+/* body {
+    background: url("./2506307.png");
+  } */
