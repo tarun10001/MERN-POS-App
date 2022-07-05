@@ -3,12 +3,18 @@ const dbConnect = require('./dbConnect');
 
 const cors = require('cors');
 
-const itemsRoute = require('./routes/itemsRoute');
-
 const app = express();
 app.use(express.json());
+
+const itemsRoute = require('./routes/itemsRoute');
+const usersRoute = require('./routes/UserRoute');
+
+
+
 app.use(cors());
 app.use('/api/items/', itemsRoute);
+app.use('/api/users/', usersRoute);
+
 
 
 const port = 5000;

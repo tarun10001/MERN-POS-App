@@ -40,7 +40,7 @@ function Item({ item }) {
         </Button>
       </div>
 
-      <Modal visible={isModalVisible}  onCancel={() => setIsModalVisible(false)} footer={false}>
+      <Modal visible={isModalVisible} onCancel={() => setIsModalVisible(false)} footer={false}>
        Product Added Successfully
       </Modal>
 
@@ -51,37 +51,3 @@ function Item({ item }) {
 }
 
 export default Item;
-
-// import { Button, Modal } from 'antd';
-// import { useState } from 'react';
-
-// const App = () => {
-//   const [isModalVisible, setIsModalVisible] = useState(false);
-
-//   const showModal = () => {
-//     setIsModalVisible(true);
-//   };
-
-//   const handleOk = () => {
-//     setIsModalVisible(false);
-//   };
-
-//   const handleCancel = () => {
-//     setIsModalVisible(false);
-//   };
-
-//   return (
-//     <>
-//       <Button type="primary" onClick={showModal}>
-//         Open Modal
-//       </Button>
-//       <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-//         <p>Some contents...</p>
-//         <p>Some contents...</p>
-//         <p>Some contents...</p>
-//       </Modal>
-//     </>
-//   );
-// };
-
-// export default App;

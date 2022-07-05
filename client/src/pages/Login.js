@@ -1,14 +1,36 @@
 import React from 'react';
 import { Button, Form, Input, message, Col, Row } from "antd";
-import {Link} from  'react-router-dom';
+import {Link, useNavigate} from  'react-router-dom';
 import "../resources/authentication.css";
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+import { useEffect } from 'react';
 
 
 function Login() {
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const onFinish = (values) => {
-        console.log(values);
-    }
+        dispatch({type: 'showLoading'})
+          axios.post('/api/users/login', values).then((res) => {
+        dispatch({type: 'hideLoading'})          
+            message.success("Login successfull")
+            localStorage.setItem('pos-user', JSON.stringify(res.data))
+          navigate('/home')
+          }).catch(() => {
+        dispatch({type: 'hideLoading'})
+            message.error("Something went wrong")
+          })
+      }
+
+      useEffect(() => {
+        if (localStorage.getItem('pos-user')) {
+        navigate('/home')
+        }
+      }, [])
+
   return (
     <div className="authentication">
         <Row>
@@ -21,7 +43,7 @@ function Login() {
             <hr />
             <h3>Login</h3>
 
-            <Form.Item name="userid" label="User ID">
+            <Form.Item name="userId" label="User ID">
               <Input />
             </Form.Item>
 

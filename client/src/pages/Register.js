@@ -1,14 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Form, Input, message, Col, Row } from "antd";
-import {Link} from  'react-router-dom';
+import {Link, useNavigate} from  'react-router-dom';
 import "../resources/authentication.css";
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
 
 
 function Register() {
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
     const onFinish = (values) => {
-        console.log(values);
+      dispatch({type: 'showLoading'})
+        axios.post('/api/users/register', values).then((res) => {
+      dispatch({type: 'hideLoading'})          
+          message.success("Registration successfulll, please wait for verification")
+        }).catch(() => {
+      dispatch({type: 'hideLoading'})
+          message.error("Something went wrong")
+        })
     }
+
+    useEffect(() => {
+      if (localStorage.getItem('pos-user')) {
+      navigate('/home')
+      }
+    }, [])
+
+    
   return (
     <div className="authentication">
         <Row>
@@ -26,7 +46,7 @@ function Register() {
               <Input />
             </Form.Item>
 
-            <Form.Item name="userid" label="User ID" placeholder="Enter price">
+            <Form.Item name="userId" label="User ID" placeholder="Enter price">
               <Input />
             </Form.Item>
 

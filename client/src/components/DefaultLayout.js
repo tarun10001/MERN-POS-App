@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -7,13 +7,12 @@ import {
   UserOutlined,
   CopyOutlined,
   UnorderedListOutlined,
-  LoginOutlined,
+  LoginOutlined
 } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Modal } from "antd";
 import "../resources/layout.css";
 import { Link, useNavigate } from "react-router-dom";
 import {useSelector} from 'react-redux';
-import { useEffect } from "react";
 
 
 const { Header, Sider, Content } = Layout;
@@ -26,6 +25,8 @@ const DefaultLayout = (props ) => {
   const toggle = () => {
     setCollapsed(!collapsed)
   }
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems))
@@ -72,9 +73,26 @@ const DefaultLayout = (props ) => {
             <Link to="/customers"></Link>Customers
           </Menu.Item>
 
-          <Menu.Item key="logout" icon={<LoginOutlined />}>
-            <Link to="/logout"></Link>Logout
+          
+          <Menu.Item 
+          key="logout" icon={<LoginOutlined />} onClick={() => {
+            localStorage.removeItem('pos-user')
+            navigate('/login')
+          }} >
+           
+          <div onClick={() => setIsModalVisible(true)}>
+          <Link to="/logout"></Link>
+            Logout
+            </div>
           </Menu.Item>
+         
+
+      <Modal visible={isModalVisible} 
+          onCancel={() => setIsModalVisible(false)} footer={false}>
+           Product Added Successfully
+      </Modal>
+
+
         </Menu>
       </Sider>
       <Layout className="site-layout">
