@@ -8,13 +8,14 @@ app.use(express.json());
 
 const itemsRoute = require('./routes/itemsRoute');
 const usersRoute = require('./routes/UserRoute');
+const billsRoute = require('./routes/billsRoute');
 
 
 
 app.use(cors());
 app.use('/api/items/', itemsRoute);
 app.use('/api/users/', usersRoute);
-
+app.use('/api/bills/', billsRoute);
 
 
 const port = 5000;

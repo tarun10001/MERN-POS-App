@@ -18,8 +18,11 @@ import {
   PlusCircleOutlined,
   MinusCircleOutlined,
 } from "@ant-design/icons";
+import axios from "axios";
+
 
 function CartPage() {
+
   const { cartItems } = useSelector((state) => state.reducer);
   const [subTotal, setSubTotal] = useState(0);
   const [billChargeModal, setBillChargeModal] = useState(false);
@@ -86,24 +89,35 @@ function CartPage() {
     },
   ];
 
-  const onFinish = (values) => {
-    const reqObject = {
-      ...values,
-      subTotal,
-      gst : Number(((subTotal / 100) * 18).toFixed(2)),
-      totalAmount : Number(subTotal + Number(((subTotal / 100) * 18).toFixed(2))),
-      userId : JSON.parse(localStorage.getItem('pos-user'))._id
-    }
-    console.log(reqObject)
-  };
-
   useEffect(() => {
     let temp = 0;
     cartItems.forEach((item) => {
       temp = temp + item.price * item.quantity;
     });
     setSubTotal(temp);
-  });
+  }, [cartItems]);
+
+  const onFinish = (values) => {
+    const reqObject = {
+      ...values,
+      subTotal,
+      cartItems,
+      gst: Number(((subTotal / 100) * 18).toFixed(2)),
+      totalAmount: Number(
+        subTotal + Number(((subTotal / 100) * 18).toFixed(2))
+      ),
+      userId: JSON.parse(localStorage.getItem("pos-user"))._id,
+    };
+    console.log(reqObject)
+    axios.post("/api/bills/charge-bill", reqObject)
+      .then(() => {
+        message.success("Bill Charged Successfully");
+      })
+      .catch(() => {
+        message.error("Something went wrong");
+      });
+  };
+
 
   return (
     <DefaultLayout>
@@ -122,9 +136,11 @@ function CartPage() {
         </Button>
       </div>
 
-      <Modal title="Charge Bill" visible={billChargeModal} 
-      footer={false}
-      onCancel={() => setBillChargeModal(false)}
+      <Modal
+        title="Charge Bill"
+        visible={billChargeModal}
+        footer={false}
+        onCancel={() => setBillChargeModal(false)}
       >
         <Form layout="vertical" onFinish={onFinish}>
           <Form.Item name="customerName" label="Customer Name">
@@ -143,10 +159,17 @@ function CartPage() {
           </Form.Item>
 
           <div className="charge-bill-amount">
-            <h5>SUB-TOTAL : <b>{subTotal}</b></h5>
-            <h5>GST : <b>{((subTotal / 100) * 18).toFixed(2)}</b></h5>
+            <h5>
+              SUB-TOTAL : <b>{subTotal}</b>
+            </h5>
+            <h5>
+              GST : <b>{((subTotal / 100) * 18).toFixed(2)}</b>
+            </h5>
             <hr />
-            <h2>Grand Total : <b>{subTotal + Math.round((subTotal / 100) * 18)}</b></h2>
+            <h2>
+              Grand Total :{" "}
+              <b>{subTotal + Math.round((subTotal / 100) * 18)}</b>
+            </h2>
           </div>
 
           <div className="d-flex justify-content-end">
@@ -159,5 +182,6 @@ function CartPage() {
     </DefaultLayout>
   );
 }
+
 
 export default CartPage;
