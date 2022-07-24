@@ -61,6 +61,11 @@ const DefaultLayout = (props ) => {
             <Link to="/home"></Link>Home
           </Menu.Item>
 
+            
+          <Menu.Item key="/cart" icon={<ShoppingCartOutlined /> }>
+            <Link to="/cart"></Link>Cart
+          </Menu.Item>
+
           <Menu.Item key="/bills" icon={<CopyOutlined />}>
             <Link to="/bills"></Link>'Bills
           </Menu.Item>
@@ -75,7 +80,7 @@ const DefaultLayout = (props ) => {
 
           
           <Menu.Item 
-          key="logout" icon={<LoginOutlined />} onClick={() => {
+          key="/logout" icon={<LoginOutlined />} onClick={() => {
             localStorage.removeItem('pos-user')
             navigate('/login')
           }} >
@@ -88,7 +93,7 @@ const DefaultLayout = (props ) => {
          
 
       <Modal visible={isModalVisible} 
-          onCancel={() => setIsModalVisible(false)} footer={false}>
+          onCancel={() => setIsModalVisible(false)} footer={false} >
            Product Added Successfully
       </Modal>
 
