@@ -6,6 +6,8 @@ import ProductDetails from './pages/ProductDetails';
 import CartPage from './pages/CartPage';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import Bills from './pages/Bills';
+import Customers from './pages/Customers';
 
 
 function App() {
@@ -16,6 +18,10 @@ function App() {
       <Route path="/items" element={<ProtectedRoute><Items /></ProtectedRoute>}></Route>
       <Route path="/home/items/:id" element={<ProductDetails />}></Route>
       <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>}></Route>
+      <Route path="/bills" element={<ProtectedRoute><Bills /></ProtectedRoute>}></Route>
+      <Route path="/customers" element={<ProtectedRoute><Customers /></ProtectedRoute>}></Route>
+
+
       <Route path="/register" element={<Register />}></Route>
       <Route path="/login" element={<Login />}></Route>
       <Route path="/" element={<Login />}></Route>
